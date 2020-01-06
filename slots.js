@@ -53,7 +53,7 @@ class RandomPicker extends React.PureComponent {
     const { isRunning, currentChoice } = this.state;
     
     return (
-      <div className="RandomPicker">
+      '<div className="RandomPicker">
         <RandomPickerChoice choice={currentChoice} />
         <RandomPickerControls 
           isRunning={isRunning}
@@ -62,7 +62,7 @@ class RandomPicker extends React.PureComponent {
           stop={this.stop}
           reset={this.reset}
         />
-      </div>
+      </div>'
     );
   }
 }
