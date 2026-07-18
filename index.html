@@ -1,148 +1,474 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADULT UNO • TRUTH OR DARE</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;display=swap" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;display=swap');
-        
-        body {
-            font-family: 'Press Start 2P', system-ui;
-            background: linear-gradient(135deg, #1a0033, #330033);
-            color: white;
-            overflow: hidden;
-        }
-        
-        .uno-card {
-            width: 280px;
-            height: 380px;
-            border-radius: 20px;
-            position: relative;
-            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.6);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 8px solid #fff;
-            background: white;
-            overflow: hidden;
-        }
-        
-        .card-back {
-            background: repeating-linear-gradient(
-                45deg,
-                #000,
-                #000 10px,
-                #e30613 10px,
-                #e30613 20px
-            );
-        }
-        
-        .flipping {
-            animation: flipCard 1.2s ease forwards;
-        }
-        
-        @keyframes flipCard {
-            0% { transform: rotateY(0deg) scale(0.8); }
-            50% { transform: rotateY(90deg) scale(0.9); }
-            100% { transform: rotateY(0deg) scale(1); }
-        }
-        
-        .neon-text {
-            text-shadow: 
-                0 0 10px #fff,
-                0 0 20px #fff,
-                0 0 40px #e30613;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#080808" />
+  <title>Adult UNO • Truth or Dare</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --red: #ed1c24;
+      --red-dark: #9c0b10;
+      --yellow: #ffd21e;
+      --blue: #1473e6;
+      --green: #18a64a;
+      --purple: #7c39d8;
+      --ink: #090909;
+      --panel: rgba(15, 15, 18, 0.94);
+      --text: #fffaf0;
+      --muted: #c9c7d0;
+      --safe-bottom: max(18px, env(safe-area-inset-bottom));
+    }
+
+    * { box-sizing: border-box; }
+
+    html { min-height: 100%; background: var(--ink); }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      margin: 0;
+      color: var(--text);
+      font-family: "Nunito", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 15% 12%, rgba(237, 28, 36, .34), transparent 28rem),
+        radial-gradient(circle at 88% 78%, rgba(20, 115, 230, .25), transparent 26rem),
+        linear-gradient(145deg, #17100c 0%, #080808 48%, #12091d 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .14;
+      background-image:
+        linear-gradient(45deg, transparent 46%, rgba(255,255,255,.08) 47%, rgba(255,255,255,.08) 53%, transparent 54%),
+        linear-gradient(-45deg, transparent 46%, rgba(255,255,255,.05) 47%, rgba(255,255,255,.05) 53%, transparent 54%);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, black, transparent 80%);
+    }
+
+    button { font: inherit; }
+
+    .app {
+      width: min(100%, 1040px);
+      min-height: 100vh;
+      min-height: 100dvh;
+      margin: 0 auto;
+      padding: 18px clamp(14px, 4vw, 34px) var(--safe-bottom);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: clamp(20px, 5vh, 42px);
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+
+    .brand-mark {
+      width: 54px;
+      aspect-ratio: 1;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border: 3px solid white;
+      border-radius: 18px;
+      background: var(--red);
+      box-shadow: 6px 6px 0 #000, 0 0 28px rgba(237, 28, 36, .35);
+      transform: rotate(-7deg);
+      font-size: 28px;
+    }
+
+    .title-wrap { min-width: 0; }
+
+    h1 {
+      margin: 0;
+      font-family: "Fredoka", sans-serif;
+      font-size: clamp(1.65rem, 6vw, 3rem);
+      font-weight: 700;
+      line-height: .92;
+      letter-spacing: -.04em;
+      text-transform: uppercase;
+      text-shadow: 3px 4px 0 #000;
+    }
+
+    .subtitle {
+      margin: 6px 0 0;
+      color: var(--yellow);
+      font-size: clamp(.72rem, 2.7vw, .94rem);
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .age-pill {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 12px;
+      border: 2px solid rgba(255,255,255,.72);
+      border-radius: 999px;
+      background: rgba(0,0,0,.42);
+      box-shadow: 4px 4px 0 rgba(0,0,0,.7);
+      font-size: .72rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .game {
+      flex: 1;
+      display: grid;
+      align-content: center;
+      gap: clamp(22px, 5vh, 42px);
+    }
+
+    .intro {
+      max-width: 660px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .intro h2 {
+      margin: 0;
+      font-family: "Fredoka", sans-serif;
+      font-size: clamp(1.35rem, 5vw, 2.25rem);
+      letter-spacing: -.025em;
+    }
+
+    .intro p {
+      margin: 8px auto 0;
+      max-width: 52ch;
+      color: var(--muted);
+      font-size: clamp(.9rem, 3vw, 1.05rem);
+      line-height: 1.45;
+    }
+
+    .draw-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(12px, 3vw, 22px);
+      max-width: 780px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .draw-card {
+      position: relative;
+      min-height: clamp(210px, 33vw, 300px);
+      padding: clamp(18px, 4vw, 28px);
+      border: 5px solid white;
+      border-radius: clamp(22px, 5vw, 34px);
+      color: white;
+      cursor: pointer;
+      overflow: hidden;
+      box-shadow: 10px 12px 0 #000, 0 24px 55px rgba(0,0,0,.38);
+      transition: transform .18s ease, filter .18s ease, box-shadow .18s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .draw-card:hover { transform: translateY(-5px) rotate(-1deg); filter: brightness(1.08); }
+    .draw-card:active { transform: translate(4px, 5px); box-shadow: 5px 6px 0 #000; }
+    .draw-card:focus-visible { outline: 4px solid var(--yellow); outline-offset: 5px; }
+
+    .draw-card::before {
+      content: "";
+      position: absolute;
+      width: 125%;
+      height: 70%;
+      left: -12%;
+      top: 15%;
+      border-radius: 50%;
+      background: white;
+      transform: rotate(-24deg);
+      box-shadow: inset 0 0 0 7px rgba(0,0,0,.08);
+    }
+
+    .truth { background: linear-gradient(145deg, #fa3038, var(--red-dark)); }
+    .dare { background: linear-gradient(145deg, #8d4df0, #42137f); }
+
+    .corner {
+      position: absolute;
+      z-index: 2;
+      font-family: "Fredoka", sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.2rem, 4vw, 2rem);
+      line-height: 1;
+    }
+
+    .corner.top { top: 15px; left: 17px; }
+    .corner.bottom { right: 17px; bottom: 15px; transform: rotate(180deg); }
+
+    .card-center {
+      position: relative;
+      z-index: 2;
+      min-height: 100%;
+      display: grid;
+      place-content: center;
+      justify-items: center;
+      color: #111;
+      transform: rotate(-7deg);
+    }
+
+    .plus {
+      font-family: "Fredoka", sans-serif;
+      font-size: clamp(4.25rem, 13vw, 8rem);
+      font-weight: 700;
+      line-height: .78;
+      letter-spacing: -.08em;
+      text-shadow: 3px 4px 0 rgba(0,0,0,.16);
+    }
+
+    .label {
+      margin-top: clamp(14px, 3vw, 20px);
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: #111;
+      color: white;
+      font-family: "Fredoka", sans-serif;
+      font-size: clamp(.95rem, 3.2vw, 1.4rem);
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .hint {
+      margin: 0;
+      color: rgba(255,255,255,.56);
+      text-align: center;
+      font-size: .78rem;
+      font-weight: 800;
+    }
+
+    .result-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: rgba(0,0,0,.72);
+      backdrop-filter: blur(12px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .2s ease, visibility .2s ease;
+    }
+
+    .result-layer.open { opacity: 1; visibility: visible; }
+
+    .result-panel {
+      --accent: var(--red);
+      position: relative;
+      width: min(100%, 650px);
+      max-height: calc(100dvh - 36px);
+      overflow: auto;
+      padding: clamp(22px, 6vw, 42px);
+      border: 6px solid white;
+      border-radius: clamp(28px, 7vw, 44px);
+      background:
+        radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent) 34%, transparent), transparent 48%),
+        var(--panel);
+      box-shadow: 12px 14px 0 #000, 0 30px 90px rgba(0,0,0,.65);
+      transform: translateY(34px) scale(.88) rotate(2deg);
+      transition: transform .38s cubic-bezier(.16, 1, .3, 1);
+      scrollbar-width: thin;
+    }
+
+    .result-layer.open .result-panel {
+      transform: translateY(0) scale(1) rotate(0);
+      animation: panelWobble .55s .2s ease both;
+    }
+
+    @keyframes panelWobble {
+      0% { transform: scale(1) rotate(0); }
+      38% { transform: scale(1.025) rotate(-1.2deg); }
+      70% { transform: scale(.995) rotate(.5deg); }
+      100% { transform: scale(1) rotate(0); }
+    }
+
+    .result-badge {
+      width: fit-content;
+      margin: 0 auto clamp(18px, 4vw, 28px);
+      padding: 10px 18px;
+      border: 3px solid white;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 5px 6px 0 #000;
+      font-family: "Fredoka", sans-serif;
+      font-size: clamp(1.15rem, 4.5vw, 1.75rem);
+      font-weight: 700;
+      letter-spacing: .03em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .prompt {
+      margin: 0;
+      color: var(--text);
+      font-family: "Fredoka", sans-serif;
+      font-size: clamp(1.35rem, 5.3vw, 2.3rem);
+      font-weight: 600;
+      line-height: 1.18;
+      text-align: center;
+      text-wrap: balance;
+    }
+
+    .consent-note {
+      margin: clamp(18px, 4vw, 26px) 0 0;
+      color: var(--muted);
+      font-size: .83rem;
+      font-weight: 800;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 12px;
+      margin-top: clamp(22px, 5vw, 34px);
+    }
+
+    .action {
+      min-height: 54px;
+      border: 3px solid white;
+      border-radius: 18px;
+      color: white;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 5px 6px 0 #000;
+      transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
+    }
+
+    .action:hover { filter: brightness(1.1); transform: translateY(-2px); }
+    .action:active { transform: translate(3px, 4px); box-shadow: 2px 2px 0 #000; }
+    .close-btn { background: #25252b; }
+    .again-btn { background: var(--accent); }
+
+    .skip-link {
+      display: block;
+      width: fit-content;
+      margin: 18px auto 0;
+      padding: 4px;
+      border: 0;
+      background: transparent;
+      color: #d2d0d8;
+      cursor: pointer;
+      font-size: .78rem;
+      font-weight: 900;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .footer {
+      margin-top: clamp(22px, 5vh, 42px);
+      color: rgba(255,255,255,.45);
+      text-align: center;
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 620px) {
+      .app { padding-top: 14px; }
+      .topbar { align-items: flex-start; }
+      .brand-mark { width: 46px; border-radius: 15px; font-size: 24px; }
+      .age-pill span:last-child { display: none; }
+      .draw-grid { gap: 11px; }
+      .draw-card { min-height: 220px; border-width: 4px; box-shadow: 7px 8px 0 #000; }
+      .actions { grid-template-columns: 1fr; }
+      .again-btn { grid-row: 1; }
+      .result-panel { border-width: 5px; box-shadow: 8px 9px 0 #000, 0 25px 80px rgba(0,0,0,.65); }
+    }
+
+    @media (max-width: 390px) {
+      .draw-card { min-height: 190px; padding: 14px; }
+      .corner { font-size: 1.1rem; }
+      .plus { font-size: 3.9rem; }
+      .label { font-size: .78rem; padding: 6px 10px; }
+      .intro p { font-size: .83rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4">
-    <div class="max-w-4xl w-full">
-        <!-- Header -->
-        <div class="flex items-center justify-between mb-8">
-            <div class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center text-3xl">🃏</div>
-                <div>
-                    <h1 class="text-4xl font-bold tracking-widest neon-text">ADULT UNO</h1>
-                    <p class="text-yellow-300 text-sm tracking-widest">TRUTH OR DARE 🔥 18+</p>
-                </div>
-            </div>
-            <div class="text-xs bg-black/60 px-6 py-3 rounded-2xl border border-white/30">
-                CONSENT IS SEXY • ALL PLAYERS 18+
-            </div>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">🃏</div>
+        <div class="title-wrap">
+          <h1>Adult UNO</h1>
+          <p class="subtitle">Truth or Dare</p>
         </div>
+      </div>
+      <div class="age-pill" aria-label="Adults only, all players must consent">
+        <span>18+</span><span>Consent first</span>
+      </div>
+    </header>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            <!-- TRUTH SIDE -->
-            <div class="space-y-6">
-                <div class="text-center">
-                    <div class="inline-block bg-red-600 text-white px-8 py-2 text-xl font-bold rounded-t-3xl">+2 TRUTH</div>
-                </div>
-                
-                <div onclick="drawTruth()" id="truth-deck"
-                     class="mx-auto deck-stack w-[240px] h-[320px] cursor-pointer active:scale-95 transition-all">
-                    <div class="relative w-full h-full">
-                        <div class="uno-card card-back absolute top-0 left-0 w-[240px] h-[320px]"></div>
-                        <div class="uno-card card-back absolute top-3 left-3 w-[240px] h-[320px]"></div>
-                    </div>
-                </div>
+    <section class="game" aria-labelledby="game-title">
+      <div class="intro">
+        <h2 id="game-title">Choose your card</h2>
+        <p>Draw a <strong>+2</strong> for a truth or risk a <strong>+4</strong> for a dare.</p>
+      </div>
 
-                <button onclick="drawTruth()" 
-                        class="w-full bg-red-600 hover:bg-red-700 transition-colors text-white font-bold py-6 text-2xl rounded-3xl shadow-2xl">
-                    DRAW +2 TRUTH
-                </button>
-            </div>
+      <div class="draw-grid">
+        <button class="draw-card truth" type="button" data-draw="truth" aria-label="Draw a plus two truth card">
+          <span class="corner top">+2</span>
+          <span class="card-center">
+            <span class="plus">+2</span>
+            <span class="label">Truth</span>
+          </span>
+          <span class="corner bottom">+2</span>
+        </button>
 
-            <!-- DARE SIDE -->
-            <div class="space-y-6">
-                <div class="text-center">
-                    <div class="inline-block bg-purple-600 text-white px-8 py-2 text-xl font-bold rounded-t-3xl">+4 DARE</div>
-                </div>
-                
-                <div onclick="drawDare()" id="dare-deck"
-                     class="mx-auto deck-stack w-[240px] h-[320px] cursor-pointer active:scale-95 transition-all">
-                    <div class="relative w-full h-full">
-                        <div class="uno-card card-back absolute top-0 left-0 w-[240px] h-[320px]"></div>
-                        <div class="uno-card card-back absolute top-3 left-3 w-[240px] h-[320px]"></div>
-                    </div>
-                </div>
+        <button class="draw-card dare" type="button" data-draw="dare" aria-label="Draw a plus four dare card">
+          <span class="corner top">+4</span>
+          <span class="card-center">
+            <span class="plus">+4</span>
+            <span class="label">Dare</span>
+          </span>
+          <span class="corner bottom">+4</span>
+        </button>
+      </div>
 
-                <button onclick="drawDare()" 
-                        class="w-full bg-purple-600 hover:bg-purple-700 transition-colors text-white font-bold py-6 text-2xl rounded-3xl shadow-2xl">
-                    DRAW +4 DARE
-                </button>
-            </div>
-        </div>
+      <p class="hint">Tap a card · Keyboard: T for truth, D for dare</p>
+    </section>
 
-        <!-- Revealed Area -->
-        <div id="card-container" class="mt-12 flex justify-center min-h-[420px]">
-            <!-- Dynamic card appears here -->
-        </div>
+    <footer class="footer">Adults only · Anyone may decline or redraw</footer>
+  </main>
 
-        <!-- Result Panel -->
-        <div id="result-panel" class="hidden mt-8 bg-black/80 backdrop-blur-xl border-4 border-white rounded-3xl p-8 max-w-2xl mx-auto">
-            <div id="effect-type" class="text-4xl font-bold mb-6 text-center"></div>
-            <div id="prompt-text" class="text-2xl leading-relaxed text-pink-100 min-h-[160px] italic"></div>
-            
-            <div class="flex gap-4 mt-10">
-                <button onclick="hideResult()" 
-                        class="flex-1 border-2 border-white/70 py-5 rounded-2xl font-bold hover:bg-white hover:text-black transition-all">
-                    CLOSE
-                </button>
-                <button onclick="drawAgain()" 
-                        class="flex-1 bg-gradient-to-r from-pink-500 to-purple-600 py-5 rounded-2xl font-bold hover:brightness-110">
-                    DRAW AGAIN
-                </button>
-            </div>
-        </div>
+  <div id="result-layer" class="result-layer" role="dialog" aria-modal="true" aria-labelledby="result-title" aria-describedby="prompt-text">
+    <section id="result-panel" class="result-panel">
+      <div id="result-title" class="result-badge">+2 Truth</div>
+      <p id="prompt-text" class="prompt"></p>
+      <p class="consent-note">Everyone involved must actively agree. No explanation is needed to decline.</p>
+      <div class="actions">
+        <button id="close-button" class="action close-btn" type="button">Close</button>
+        <button id="again-button" class="action again-btn" type="button">Draw again</button>
+      </div>
+      <button id="switch-button" class="skip-link" type="button">Switch card type</button>
+    </section>
+  </div>
 
-        <div class="text-center mt-12 text-xs opacity-60">
-            VERY NSFW • CONSENSUAL ONLY • NO OBJECTS REQUIRED
-        </div>
-    </div>
-
-    <script>
-        const truths = [
+  <script>
+    const truths = [
             "What's the sluttiest thing you've ever done in public?",
             "Describe your last orgasm in explicit detail.",
             "What's the biggest dick or best pussy you've ever had?",
@@ -158,129 +484,111 @@
             "Show us the dirtiest text you've ever sent.",
             "What's your body count this year?",
             "Have you ever had sex with someone much older or younger?"
-        ];
-        
-        const dares = [
-            "Go the rest of the round completely naked.",
-            "Let the player who drew this card motorboat you for 15 seconds.",
-            "Give the person to your left a very sexual lap dance for 45 seconds.",
-            "Kiss the person on your right using tongue for 30 seconds.",
-            "Strip down to nothing and do 10 naked jumping jacks.",
-            "Let everyone here spank you 5 times each (as hard as they want).",
-            "Masturbate in front of the group for one full minute.",
-            "Suck on the fingers of the person who drew this card seductively.",
-            "Grind on the lap of the player to your right until the next round ends.",
-            "Let the group choose where on your body they get to write 'FREE USE'.",
-            "French kiss the player across from you passionately for 20 seconds.",
-            "Remove all clothing and stay naked for the next 3 rounds.",
-            "Let the person who drew this card touch you anywhere they want for 30 seconds.",
-            "Perform a striptease for the whole group.",
-            "Get on all fours and let the group take turns giving you a playful spank.",
-            "Moan your partner's name loudly while describing how you'd fuck them.",
-            "Let someone give you a hickey somewhere visible.",
-            "Give oral stimulation to the person on your left for 20 seconds (consensual).",
-            "Sit on someone's lap completely naked for the next round."
-        ];
-        
-        function createTruthCard() {
-            const container = document.createElement('div');
-            container.className = `uno-card flipping`;
-            container.style.borderColor = '#e30613';
-            container.innerHTML = `
-                <div class="h-full w-full flex flex-col items-center justify-center p-6 bg-white text-black relative">
-                    <div class="absolute top-4 left-4 text-5xl font-black text-red-600">+2</div>
-                    <div class="text-[110px] font-black text-red-600 leading-none">+2</div>
-                    <div class="mt-4 bg-red-600 text-white text-3xl font-bold px-10 py-2 rounded-2xl">TRUTH</div>
-                    <div class="absolute bottom-4 right-4 text-5xl font-black text-red-600 rotate-180">+2</div>
-                </div>
-            `;
-            return container;
-        }
-        
-        function createDareCard() {
-            const container = document.createElement('div');
-            container.className = `uno-card flipping`;
-            container.style.borderColor = '#6b21a8';
-            container.innerHTML = `
-                <div class="h-full w-full flex flex-col items-center justify-center p-6 bg-black text-white relative">
-                    <div class="absolute top-4 left-4 text-5xl font-black text-purple-400">+4</div>
-                    <div class="text-[110px] font-black text-purple-400 leading-none">+4</div>
-                    <div class="mt-4 bg-purple-600 text-white text-3xl font-bold px-10 py-2 rounded-2xl">DARE</div>
-                    <div class="absolute bottom-4 right-4 text-5xl font-black text-purple-400 rotate-180">+4</div>
-                </div>
-            `;
-            return container;
-        }
-        
-        function drawTruth() {
-            const container = document.getElementById('card-container');
-            container.innerHTML = '';
-            const card = createTruthCard();
-            container.appendChild(card);
-            
-            setTimeout(() => {
-                const prompt = truths[Math.floor(Math.random() * truths.length)];
-                showResult("🔥 +2 TRUTH 🔥", prompt, 'red');
-            }, 900);
-        }
-        
-        function drawDare() {
-            const container = document.getElementById('card-container');
-            container.innerHTML = '';
-            const card = createDareCard();
-            container.appendChild(card);
-            
-            setTimeout(() => {
-                const prompt = dares[Math.floor(Math.random() * dares.length)];
-                showResult("😈 +4 DARE 😈", prompt, 'purple');
-            }, 900);
-        }
-        
-        function showResult(title, prompt, color) {
-            const panel = document.getElementById('result-panel');
-            panel.classList.remove('hidden');
-            
-            document.getElementById('effect-type').innerHTML = `
-                <span style="color: ${color === 'red' ? '#e30613' : '#a855f7'}">${title}</span>
-            `;
-            document.getElementById('prompt-text').innerHTML = `"${prompt}"`;
-        }
-        
-        function hideResult() {
-            document.getElementById('result-panel').classList.add('hidden');
-            document.getElementById('card-container').innerHTML = `
-                <div class="text-center opacity-40 py-24">
-                    <div class="text-7xl mb-6">🃏</div>
-                    <p>Choose a side to draw</p>
-                </div>
-            `;
-        }
-        
-        function drawAgain() {
-            hideResult();
-            // Randomly choose which to draw next for flow
-            if (Math.random() > 0.5) {
-                drawTruth();
-            } else {
-                drawDare();
-            }
-        }
-        
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 't' || e.key === 'T') drawTruth();
-            if (e.key === 'd' || e.key === 'D') drawDare();
-        });
-        
-        // Initialize
-        window.onload = () => {
-            document.getElementById('card-container').innerHTML = `
-                <div class="text-center opacity-40 py-24">
-                    <div class="text-7xl mb-6">🃏</div>
-                    <p class="text-xl">Click a deck to draw</p>
-                </div>
-            `;
-        };
-    </script>
+    ];
+
+    const dares = [
+  "Go the rest of the round completely naked.",
+  "Let the player who drew this card motorboat you for 5 seconds.",
+  "Give the person to your left a very sexual lap dance for 15 seconds.",
+  "Strip down to nothing and do 10 naked jumping jacks.",
+  "Let everyone here spank you once each (as hard as they want).",
+  "Suck on the fingers of the person who drew this card seductively.",
+  "Grind on the lap of the player to your right until the next round ends.",
+  "Let the group choose where on your body they get to write 'FREE USE'.",
+  "Remove all clothing and stay naked for the next 3 rounds.",
+  "Let the person who drew this card touch you anywhere they want for 5 seconds.",
+  "Perform a striptease for the whole group.",
+  "Get on all fours and let the group take turns giving you 3 spanks until the person who played this card say's stop.",
+  "Moan the name of who played this card loudly while describing how you'd fuck them.",
+  "Choose someone from the group to suck/kiss any spot of their choice on your body",
+  "Give hand-job/finger to the person on your left for 20 seconds (consensual).",
+  "Sit on someone's lap completely naked for the next round.",
+  "Let the group watch you play with yourself for 10 seconds.",
+  "Take off your underwear and hand it to the person on your right.",
+  "Do a naked twerk for 10 seconds.",
+  "Let two people suck on your nipples at the same time.",
+  "Give a footjob or handjob to a player of your choice.",
+  "Crawl around naked while everyone watches."
+  "Do your best dramatic runway walk around the room while everyone applauds.",
+  "Recreate an over-the-top romantic movie confession to a player of your choice",
+  "Hold uninterrupted eye contact with another player for 30 seconds. First person to laugh loses.",
+  "Give the player who played this card access to your locked/my-eyes-only album for 30 seconds (they can't show anyone but can talk about what they see)",
+  "Spend your next turn acting like your favourite celebrity or fictional character.",
+  "Pretend you're proposing in the most over-the-top romantic way possible to the player of your choice.",
+  "Choose one player to strip naked for you and then narrate their body/movement like david attenborough",
+  "Walk up to another player and introduce yourself as if you've just met them at a bar and you're trying to some",
+  "For the next two rounds, you must refer to everyone by an exaggerated pet name (e.g. "Darling", "Sunshine", "Your Majesty", "Handsome", "Beautiful") without breaking character"
+];
+
+    const state = {
+      currentType: null,
+      previousTruth: -1,
+      previousDare: -1
+    };
+
+    const resultLayer = document.getElementById('result-layer');
+    const resultPanel = document.getElementById('result-panel');
+    const resultTitle = document.getElementById('result-title');
+    const promptText = document.getElementById('prompt-text');
+    const closeButton = document.getElementById('close-button');
+    const againButton = document.getElementById('again-button');
+    const switchButton = document.getElementById('switch-button');
+
+    function randomIndex(items, previousIndex) {
+      if (items.length <= 1) return 0;
+      let index;
+      do index = Math.floor(Math.random() * items.length);
+      while (index === previousIndex);
+      return index;
+    }
+
+    function draw(type) {
+      const isTruth = type === 'truth';
+      const prompts = isTruth ? truths : dares;
+      const previous = isTruth ? state.previousTruth : state.previousDare;
+      const index = randomIndex(prompts, previous);
+
+      state.currentType = type;
+      if (isTruth) state.previousTruth = index;
+      else state.previousDare = index;
+
+      const accent = isTruth ? '#ed1c24' : '#7c39d8';
+      resultPanel.style.setProperty('--accent', accent);
+      resultTitle.textContent = isTruth ? '+2 Truth' : '+4 Dare';
+      promptText.textContent = prompts[index];
+      againButton.textContent = isTruth ? 'Another truth' : 'Another dare';
+      switchButton.textContent = isTruth ? 'Switch to a dare' : 'Switch to a truth';
+
+      resultLayer.classList.remove('open');
+      void resultLayer.offsetWidth;
+      resultLayer.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      closeButton.focus({ preventScroll: true });
+    }
+
+    function closeResult() {
+      resultLayer.classList.remove('open');
+      document.body.style.overflow = '';
+      document.querySelector(`[data-draw="${state.currentType}"]`)?.focus({ preventScroll: true });
+    }
+
+    document.querySelectorAll('[data-draw]').forEach(button => {
+      button.addEventListener('click', () => draw(button.dataset.draw));
+    });
+
+    closeButton.addEventListener('click', closeResult);
+    againButton.addEventListener('click', () => draw(state.currentType || 'truth'));
+    switchButton.addEventListener('click', () => draw(state.currentType === 'truth' ? 'dare' : 'truth'));
+
+    resultLayer.addEventListener('click', event => {
+      if (event.target === resultLayer) closeResult();
+    });
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && resultLayer.classList.contains('open')) closeResult();
+      if (!resultLayer.classList.contains('open') && event.key.toLowerCase() === 't') draw('truth');
+      if (!resultLayer.classList.contains('open') && event.key.toLowerCase() === 'd') draw('dare');
+    });
+  </script>
 </body>
 </html>
